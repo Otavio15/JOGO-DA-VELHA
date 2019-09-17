@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Minha aplicação</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <style>
+        body {
+            background-image: linear-gradient(45deg, rgb(0, 170, 142), rgb(0, 197, 171));
+            background-attachment: fixed;
+        }
+        section{
+            margin-left: 5%;
+            margin-right: 5%;
+            height: 400px;
+            width: 400px;
+            border: 1px solid white;
+            background-image: linear-gradient(45deg, rgb(255, 0, 0), rgb(216, 0, 65));
+            box-shadow: 2px 3px 4px black;
+            border-radius: 20px;
+        }
+       section input{
+            height: 90px;
+            width: 90px; 
+            margin: 5%;
+            box-shadow: 3px 3px 4px black;
+            border-radius: 50px;
+            background-color: white;
+        }
+        h1{
+            margin-left: 5%;
+            font: 20pt 'arial';
+            color: white;
+            text-shadow: 2px 1px 3px black;
+        }
+
+        #painel{
+            border: 1px solid white;
+            background-image: linear-gradient(45deg, rgb(255, 0, 0), rgb(216, 0, 83));
+            box-shadow: 2px 3px 4px black;
+            width: 400px; 
+            margin: 1% 5%;
+            padding-bottom: 1%;
+            border-radius: 20px;
+        }
+
+        #painel h2, #painel input{
+            margin-left: 5%;
+        }
+
+        #painel h2{
+            font: 20pt 'arial';
+            color: white;
+            text-shadow: 2px 1px 3px black;
+        }
+
+        #painel input{
+            border-radius: 5px;
+            height: 30px;
+            width: 90px;
+        }
+        #painel input:hover{
+            background-color: yellow;
+        }
+
+    </style>
+</head>
+<body>
+    <h1><strong>Jogo da velha</strong></h1>
+
+    <section onclick="testar()">
+        <input type="submit" value="" onclick=clicou(1) onmousemove="javascript: this.style.backgroundColor = `${cor()}`" onmouseout="javascript: this.style.backgroundColor = 'white'" id="m00">
+        <input type="submit" value="" onclick=clicou(2) onmouseover="javascript: this.style.backgroundColor = `${cor()}`" onmouseout="javascript: this.style.backgroundColor = 'white'" id="m01">
+        <input type="submit" value="" onclick=clicou(3) onmouseover="javascript: this.style.backgroundColor = `${cor()}`" onmouseout="javascript: this.style.backgroundColor = 'white'" id="m02">
+        <input type="submit" value="" onclick=clicou(4) onmouseover="javascript: this.style.backgroundColor = `${cor()}`" onmouseout="javascript: this.style.backgroundColor = 'white'" id="m10">
+        <input type="submit" value="" onclick=clicou(5) onmouseover="javascript: this.style.backgroundColor = `${cor()}`" onmouseout="javascript: this.style.backgroundColor = 'white'" id="m11">
+        <input type="submit" value="" onclick=clicou(6) onmouseover="javascript: this.style.backgroundColor = `${cor()}`" onmouseout="javascript: this.style.backgroundColor = 'white'" id="m12">
+        <input type="submit" value="" onclick=clicou(7) onmouseover="javascript: this.style.backgroundColor = `${cor()}`" onmouseout="javascript: this.style.backgroundColor = 'white'" id="m20">
+        <input type="submit" value="" onclick=clicou(8) onmouseover="javascript: this.style.backgroundColor = `${cor()}`" onmouseout="javascript: this.style.backgroundColor = 'white'" id="m21">
+        <input type="submit" value="" onclick=clicou(9) onmouseover="javascript: this.style.backgroundColor = `${cor()}`" onmouseout="javascript: this.style.backgroundColor = 'white'" id="m22">
+    </section>
+    <div id="painel">
+        <h2>O placar é: Verde = 0, Azul = 0</h2>
+        <input type="button" value="Zerar placar" onclick="zerar()">
+        <input type="button" value="Ativar IA" onclick="ativarIA()" id="btnIA">
+    </div>
+    <script>
+
+        var vez = false;
+        var mx00 = '1';
+        var mx01 = '2';
+        var mx02 = '3';
+        var mx10 = '4';
+        var mx11 = '5';
+        var mx12 = '6';
+        var mx20 = '7';
+        var mx21 = '8';
+        var mx22 = '9';
+
+        var m00 = document.getElementById('m00');
+        var m01 = document.getElementById('m01');
+        var m02 = document.getElementById('m02');
+        var m10 = document.getElementById('m10');
+        var m11 = document.getElementById('m11');
+        var m12 = document.getElementById('m12');
+        var m20 = document.getElementById('m20');
+        var m21 = document.getElementById('m21');
+        var m22 = document.getElementById('m22');
+
+        placarx = 0;
+        placary = 0;
+
+        var btnBlue = 0;
+        var btnGreen = 0;
+
+        var ia = false;
+
+        function ativarIA(){
+            var painel = document.getElementById('painel');
+            var btnAtivarIA = painel.getElementsByTagName('input')[1];
+
+            if (ia === false){
+                btnAtivarIA.value = 'Desativar IA';
+                btnAtivarIA.style.color = 'white';
+                btnAtivarIA.style.backgroundColor = 'black';
+                ia = true;
+
+                if (btnBlue == 0 && btnGreen == 0){
+                    painel.innerHTML += `<input type="button" value="Azul" onclick="" id="btnBlue">`;
+                    btnBlue = painel.getElementsByTagName('input')[2];
+                    btnBlue.style.backgroundColor = 'blue';
+                    btnBlue.style.color = 'white';
+                    btnBlue.style.width = '50px';
+
+                    painel.innerHTML += `<input type="button" value="Verde" onclick="" id="btnGreen">`;
+                    btnGreen = painel.getElementsByTagName('input')[3];
+                    btnGreen.style.backgroundColor = 'green';
+                    btnGreen.style.color = 'white';
+                    btnGreen.style.width = '50px';
+                }
+                
+            }else if(ia === true){
+                btnAtivarIA.value = 'Ativar IA';
+                btnAtivarIA.style.color = 'black';
+                btnAtivarIA.style.backgroundColor = 'white';
+                ia = false;
+                var painel = document.getElementById('painel');
+                painel.innerHTML = `<h2>O placar é: Verde = ${placarx}, Azul = ${placary}<h2>`;
+                painel.innerHTML += `<input type="button" value="Zerar placar" onclick="zerar()">`;
+                painel.innerHTML += `<input type="button" value="Ativar IA" id="btnIA" onclick="ativarIA()">`;
+                btnBlue = 0;
+                btnGreen = 0;
+            }
+        }
+
+        function cor(){
+            if (vez === false){
+                return 'rgb(0, 212, 11)';
+            }
+            else if (vez === true){
+                return 'rgb(0, 39, 212)';
+            }
+        }
+
+        function zerar(){
+            placarx = 0;
+            placary = 0;
+            btnBlue = 0;
+            btnGreen = 0;
+            carregarPlacar();
+        }
+
+        function clicou(value){
+            
+            var cor1 = 'rgb(0, 212, 11)'; // ~verde
+            var cor2 = 'rgb(0, 39, 212)'; // ~azul 
+            
+            if (vez === false){
+                var flag = colorir(value, cor1, 'x', 'rgb(91, 253, 76)');
+                if (flag == true){
+                    alert('Não é possível jogar nessa posição!');
+                }else{
+                    vez = true;
+                }
+            }else{
+                var flag = colorir(value, cor2, 'o', 'rgb(76, 79, 253)');
+                if (flag == true){
+                    alert('Não é possível jogar nessa posição!');
+                }else{
+                    vez = false;
+                }
+            }
+        }
+
+        function colorir(value, cor, tipo, degrade){
+            var flag = false;
+            switch (value) {
+                case 1:
+                    if (mx00 === '1'){
+                        m00.style = `background-image: linear-gradient(45deg, ${degrade}, ${cor});`;
+                        mx00 = tipo;
+                    }else{
+                        flag = true;
+                    }
+                    break;
+                case 2:
+                    if (mx01 === '2'){
+                        m01.style = `background-image: linear-gradient(45deg, ${degrade}, ${cor});`;
+                        mx01 = tipo;
+                    }else{
+                        flag = true;
+                    }
+                    break;
+                case 3:
+                    if (mx02 === '3'){
+                        m02.style = `background-image: linear-gradient(45deg, ${degrade}, ${cor});`;
+                        mx02 = tipo;
+                    }else{
+                        flag = true;
+                    }
+                    break;
+                case 4:
+                    if (mx10 === '4'){
+                        m10.style = `background-image: linear-gradient(45deg, ${degrade}, ${cor});`;
+                        mx10 = tipo;
+                    }else{
+                        flag = true;
+                    }
+                    break;
+                case 5:
+                    if (mx11 === '5'){
+                        m11.style = `background-image: linear-gradient(45deg, ${degrade}, ${cor});`;
+                        mx11 = tipo;
+                    }else{
+                        flag = true;
+                    }
+                    break;
+                case 6:
+                    if (mx12 === '6'){
+                        m12.style = `background-image: linear-gradient(45deg, ${degrade}, ${cor});`;
+                        mx12 = tipo;
+                    }else{
+                        flag = true;
+                    }
+                    break;
+                case 7:
+                    if (mx20 === '7'){
+                        m20.style = `background-image: linear-gradient(45deg, ${degrade}, ${cor});`;
+                        mx20 = tipo;
+                    }else{
+                        flag = true;
+                    }
+                    break;
+                case 8:
+                    if (mx21 === '8'){
+                        m21.style = `background-image: linear-gradient(45deg, ${degrade}, ${cor});`;
+                        mx21 = tipo;
+                    }else{
+                        flag = true;
+                    }
+                    break;
+                case 9:
+                    if (mx22 === '9'){
+                        m22.style = `background-image: linear-gradient(45deg, ${degrade}, ${cor});`;
+                        mx22 = tipo;
+                    }else{
+                        flag = true;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return flag;
+        }
+
+        function testar(){
+            //alert(`${mx00} ${mx01} ${mx02} \n ${mx10} ${mx11} ${mx12} \n ${mx20} ${mx21} ${mx22}`);
+            if (mx00 === mx01 && mx01 === mx02){
+                contabilizar(mx00);
+            }
+            else if(mx10 === mx11 && mx11 === mx12){
+                contabilizar(mx11);
+            }
+            else if(mx20 === mx21 && mx21 === mx22){
+                contabilizar(mx22);
+            }
+            else if(mx00 === mx10 && mx10 === mx20){
+                contabilizar(mx10);
+            }
+            else if(mx01 === mx11 && mx11 === mx21){
+                contabilizar(mx01);
+            }
+            else if(mx02 === mx12 && mx12 === mx22){
+                contabilizar(mx12);
+            }
+            else if(mx00 === mx11 && mx11 === mx22){
+                contabilizar(mx00);
+            }
+            else if(mx02 === mx11 && mx11 === mx20){
+                contabilizar(mx11);
+            }else if(mx00 != '1' && mx01 != '2' && mx02 != '3' && mx10 != '4' && mx11 != '5' && mx12 != '6' && mx20 != '7' && mx21 != '8' && mx22 != '9'){
+                contabilizar('0');
+            }
+        }
+
+        function contabilizar(valor){
+            
+            if (valor === 'x'){
+                placarx++;
+                alert(`Parabéns! O jogador verde venceu! \n O placar é: Verde = ${placarx}, Azul = ${placary}`);
+            }else if(valor === 'o'){
+                placary++;
+                alert(`Parabéns! O jogador azul venceu! \n O placar é: Verde = ${placarx}, Azul = ${placary}`);
+            }else if(valor === '0'){
+                alert('O jogo deu velha!');
+            }
+    
+            mx00 = '1';
+            mx01 = '2';
+            mx02 = '3';
+            mx10 = '4';
+            mx11 = '5';
+            mx12 = '6';
+            mx20 = '7';
+            mx21 = '8';
+            mx22 = '9';
+
+            m00.style = `background-color: white;`;
+            m01.style = `background-color: white;`;
+            m02.style = `background-color: white;`;
+            m10.style = `background-color: white;`;
+            m11.style = `background-color: white;`;
+            m12.style = `background-color: white;`;
+            m20.style = `background-color: white;`;
+            m21.style = `background-color: white;`;
+            m22.style = `background-color: white;`;
+
+            btnBlue = 0;
+            btnGreen = 0;
+
+            carregarPlacar();
+        }
+        
+        function carregarPlacar(){
+            var painel = document.getElementById('painel');
+            painel.innerHTML = `<h2>O placar é: Verde = ${placarx}, Azul = ${placary}<h2>`;
+            painel.innerHTML += `<input type="button" value="Zerar placar" onclick="zerar()">`;
+            painel.innerHTML += `<input type="button" value="Ativar IA" id="btnIA" onclick="ativarIA()">`;
+            if (ia === false){
+                ia = true;
+                ativarIA();
+            }else if(ia === true){
+                ia = false;
+                ativarIA();
+            }
+        }
+    </script>
+</body>
+</html>
