@@ -5,7 +5,7 @@ app = Flask(__name__, template_folder=os.path.dirname(__file__))
 
 @app.route('/',methods = ['POST', 'GET'])
 def index():
-    return render_template('jogo.html')
+    return render_template('/jogo.html')
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))

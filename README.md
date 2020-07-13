@@ -5,5 +5,8 @@
 - O boot do jogo ainda não foi concluido.
 
 # Resultado: 
+
+http://jogodavelhaapp.herokuapp.com/
  
 ![Image of system](https://raw.githubusercontent.com/Otavio15/jogo_da_velha_js/master/jogo.png)
+
